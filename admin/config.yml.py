@@ -1,18 +1,18 @@
 backend:
   name: git-gateway
-  branch: main # ຫຼື master ຕາມຊື່ branch ໃນ GitHub ຂອງເຈົ້າ
+  branch: main # ກວດເບິ່ງວ່າ GitHub ຂອງເຈົ້າໃຊ້ main ຫຼື master
 
-media_folder: "images/news" # ບ່ອນເກັບຮູບທີ່ອັບໂຫຼດຜ່ານ CMS
-public_folder: "/images/news"
+media_folder: "image" # ບ່ອນເກັບຮູບພາບທີ່ອັບໂຫຼດຜ່ານ CMS
+public_folder: "/image"
 
 collections:
-  - name: "news" # ຊື່ຊຸດຂໍ້ມູນ
+  - name: "news"
     label: "ຂ່າວສານ"
-    folder: "data/news" # ບ່ອນເກັບໄຟລ໌ຂ່າວ (ເປັນ JSON ຫຼື Markdown)
-    create: true # ໃຫ້ເພີ່ມຂ່າວໃໝ່ໄດ້
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields: # ຊ່ອງກອກຂໍ້ມູນໃນໜ້າ Admin
-      - { label: "ຫົວຂໍ້ຂ່າວ", name: "title", widget: "string" }
-      - { label: "ວັນທີ", name: "date", widget: "datetime" }
-      - { label: "ຮູບພາບປົກ", name: "image", widget: "image" }
-      - { label: "ເນື້ອໃນຂ່າວ", name: "body", widget: "markdown" }
+    folder: "data/news" # ບ່ອນທີ່ຂ່າວຈະຖືກເກັບເປັນໄຟລ໌ .md
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "หัวข้อ", name: "title", widget: "string" }
+      - { label: "วันที่", name: "date", widget: "datetime" }
+      - { label: "รูปภาพ", name: "image", widget: "image" }
+      - { label: "เนื้อหา", name: "body", widget: "markdown" }
