@@ -17,7 +17,45 @@ function searchFunction() {
         }
     }
 }
+async function fetchNews() {
+    const container = document.getElementById('news-container');
+    try {
+        const response = await fetch('https://api.github.com/repos/sone22015-sudo/psshd512.com/contents/data/news');
+        const files = await response.json();
+        
+        container.innerHTML = ''; 
 
+        for (const file of files.reverse()) { 
+            if (file.name.endsWith('.md')) {
+                const res = await fetch(file.download_url);
+                const content = await res.text();
+                
+                const title = content.match(/title: (.*)/)?.[1]?.replace(/"/g, '') || "ບໍ່ມີຫົວຂໍ້";
+                const image = content.match(/image: (.*)/)?.[1]?.replace(/"/g, '') || "image/default.jpg";
+                
+                // ສ້າງ Link ໄປຫາໜ້າລາຍລະອຽດ ໂດຍສົ່ງຊື່ໄຟລ໌ໄປນຳ
+                const detailUrl = `news-detail.html?f=${file.name}`;
+
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item-container';
+                newsItem.style.marginBottom = "30px";
+                newsItem.innerHTML = `
+                    <div style="border: 1px solid #ddd; padding: 10px; background: #fff;" onclick="window.location.href='${detailUrl}'">
+                        <img src="${image}" alt="Activity" style="width:100%; max-height:450px; object-fit:cover;">
+                    </div>
+                    <h4 style="margin-top:15px; color:#003366; font-size:18px;">
+                        <a href="${detailUrl}" style="text-decoration:none; color:inherit;">${title}</a>
+                    </h4>
+                    <a href="${detailUrl}" class="read-more-btn">ອ່ານລາຍລະອຽດ...</a>
+                `;
+                container.appendChild(newsItem);
+            }
+        }
+    } catch (error) {
+        container.innerHTML = '<p>ບໍ່ສາມາດໂຫລດຂ່າວໄດ້ໃນຕອນນີ້.</p>';
+    }
+}
+fetchNews();
 // ລະບົບແຍກໝວດໝູ່
 function filterSelection(c) {
     let x = document.getElementsByClassName("filterDiv");

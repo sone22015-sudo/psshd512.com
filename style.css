@@ -205,7 +205,34 @@ footer { background: #333; color: white; text-align: center; padding: 20px; marg
     gap: 20px;
     padding: 0 15px;
 }
+/* ຕົບແຕ່ງປຸ່ມອ່ານຕໍ່ */
+.read-more-btn {
+    background-color: #cc0000; /* ສີແດງ */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Phetsarath OT', sans-serif;
+    font-size: 14px;
+    transition: 0.3s;
+    margin-top: 10px;
+    display: inline-block;
+    text-decoration: none;
+}
 
+.read-more-btn:hover {
+    background-color: #006600; /* ປ່ຽນເປັນສີຂຽວເວລາຊີ້ໃສ່ */
+}
+
+.news-item-container {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.news-item-container:hover {
+    transform: scale(1.01); /* ໃຫ້ມັນເດັ້ງຂຶ້ນໜ້ອຍໜຶ່ງເວລາຊີ້ໃສ່ */
+}
 /* ຝັ່ງຂ່າວ */
 #news-container {
     flex: 3; /* ໃຫ້ເນື້ອຫາຫຼັກກວ້າງກວ່າ */

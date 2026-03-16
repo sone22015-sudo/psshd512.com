@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <title>ລາຍລະອຽດຂ່າວ - ກົມ 512</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .news-detail-container { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border: 1px solid #ddd; }
+        .news-content { line-height: 1.8; font-size: 18px; margin-top: 20px; }
+        .news-detail-container img { width: 100%; border-radius: 5px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #003366; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="news-detail-container">
+        <a href="index.html" class="back-btn">← ກັບຄືນໜ້າຫຼັກ</a>
+        <div id="full-news">
+            <p>ກຳລັງໂຫລດເນື້ອຫາ...</p>
+        </div>
+    </div>
+
+    <script>
+        // Script ສຳລັບດຶງຂໍ້ມູນຂ່າວມາສະແດງຕາມ ID (ຊື່ໄຟລ໌)
+        async function loadFullNews() {
+            const params = new URLSearchParams(window.location.search);
+            const fileName = params.get('f');
+            const container = document.getElementById('full-news');
+
+            if (fileName) {
+                try {
+                    const res = await fetch(`https://raw.githubusercontent.com/sone22015-sudo/psshd512.com/main/data/news/${fileName}`);
+                    const content = await res.text();
+                    
+                    const title = content.match(/title: (.*)/)?.[1]?.replace(/"/g, '') || "ຂ່າວສານ";
+                    const image = content.match(/image: (.*)/)?.[1]?.replace(/"/g, '') || "";
+                    const body = content.split('---').pop(); // ເອົາເນື້ອຫາສ່ວນລຸ່ມຂອງ Markdown
+
+                    container.innerHTML = `
+                        <h1>${title}</h1>
+                        ${image ? `<img src="${image}">` : ''}
+                        <div class="news-content">${body.replace(/\n/g, '<br>')}</div>
+                    `;
+                } catch (e) {
+                    container.innerHTML = "ບໍ່ສາມາດໂຫລດເນື້ອຫາໄດ້.";
+                }
+            }
+        }
+        loadFullNews();
+    </script>
+</body>
+</html>

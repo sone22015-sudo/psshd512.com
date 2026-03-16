@@ -57,7 +57,23 @@
         <p style="padding: 20px;">ກຳລັງໂຫລດຂ່າວສານ...</p>
     </div>
 </main>
-
+// ປ່ຽນໃນສ່ວນ loop ທີ່ສ້າງ newsItem
+const newsItem = document.createElement('div');
+newsItem.style.marginBottom = "30px";
+newsItem.innerHTML = `
+    <div style="border: 1px solid #ddd; padding: 10px; background: #fff; cursor: pointer;" 
+         onclick="location.href='news-detail.html?f=${file.name}'">
+        <img src="${image}" alt="Activity" style="width:100%; max-height:450px; object-fit:cover;">
+    </div>
+    <h4 style="margin-top:10px; color:#003366; font-size:20px;">
+        <a href="news-detail.html?f=${file.name}" style="text-decoration:none; color:inherit;">${title}</a>
+    </h4>
+    <button onclick="location.href='news-detail.html?f=${file.name}'" 
+            style="background:#003366; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; margin-top:10px;">
+        ອ່ານລາຍລະອຽດ...
+    </button>
+`;
+container.appendChild(newsItem);
     <aside class="sidebar-right">
         <h3 class="title-bar-red">ແຈ້ງການ</h3>
         <div class="side-content">
