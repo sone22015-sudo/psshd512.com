@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Phetsarath+OT&display=swap" rel="stylesheet">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* CSS ເພີ່ມເຕີມສຳລັບສ່ວນສະແດງຂ່າວ */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
+        .news-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff; }
+        .news-card img { width: 100%; height: 200px; object-fit: cover; }
+        .news-card-content { padding: 15px; }
+        .news-card h3 { margin: 0 0 10px; color: #003366; }
+    </style>
 </head>
 <body>
 
@@ -17,7 +25,7 @@
             <div class="title-text">
                 <h1 class="ministry-title">ກະຊວງປ້ອງກັນຄວາມສະຫງົບ</h1>
                 <h2 class="dept-title">ກົມຄົ້ນຄວ້າວິທະຍາສາດ ແລະ ປະຫວັດສາດ ປກສ</h2>
-                <p class="eng-title">Puplic Security science and History Department </p>
+                <p class="eng-title">Public Security Science and History Department</p>
             </div>
         </div>
         <div class="banner-section">
@@ -27,37 +35,19 @@
 </header>
 
 <nav>
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-    
-    <ul class="nav-list">
+    <ul>
         <li><a href="index.html">ໜ້າຫຼັກ</a></li>
-        <li><a href="news.html">ຂ່າວສານ</a></li>
-        <li><a href="structure.html">ກົງຈັກການຈັດຕັ້ງ</a></li>
         <li><a href="documents.html">ເອກະສານ</a></li>
-        <li><a href="contact.html">ຕິດຕໍ່ພວກເຮົາ</a></li>
+        <li><a href="contact.html">ຕິດຕໍ່ພົວພັນ</a></li>
+        <li><a href="/admin/">ຈັດການເນື້ອຫາ</a></li>
     </ul>
 </nav>
 
-<div class="container">
-    <aside class="sidebar-left">
-        <h3 class="title-bar-red">ຂ່າວໃໝ່</h3>
-        <div class="side-content">
-            <p>• ຮັບຮອງການສະເໜີແຕ່ງຕັ້ງ...</p>
-            <p>• ກອງປະຊຸມວຽກງານ 512...</p>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <h3 class="title-bar-blue">ການເຄື່ອນໄຫວຂອງຄະນະນຳ</h3>
-        <div class="featured-news">
-            <div class="slider-placeholder">
-                <img src="news-main.jpg" alt="Activity" style="width:100%;">
-            </div>
-            <h4>ທ່ານ ຫົວໜ້າກົມ ເຂົ້າຮ່ວມກອງປະຊຸມ...</h4>
+<div class="main-layout">
+    <main>
+        <h3 class="title-bar">ຂ່າວສານ ແລະ ການເຄື່ອນໄຫວ</h3>
+        <div id="news-container" class="news-grid">
+            <p>ກຳລັງໂຫລດຂ່າວສານ...</p>
         </div>
     </main>
 
@@ -70,27 +60,48 @@
     </aside>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 <footer>
-    <div class="footer-content">
-        <p>© 2026 ກົມ 512 | ກະຊວງປ້ອງກັນຄວາມສະຫງົບ</p>
-        
-        <div class="social-links">
-            <a href="https://www.facebook.com/yourpage" target="_blank" title="ຕິດຕາມພວກເຮົາທາງ Facebook">
-                <i class="fab fa-facebook-f"></i> Facebook ກົມ 512
-            </a>
-        </div>
-
-        <div class="visitor-stats">
-            <div class="stat-item">
-                <span class="stat-label">ຜູ້ເຂົ້າຊົມທັງໝົດ:</span>
-                <span class="stat-count">1,234</span>
-            </div>
-        </div>
-    </div>
+    <p>© 2026 ກົມ 512 | ກະຊວງປ້ອງກັນຄວາມສະຫງົບ</p>
 </footer>
+
 <script>
+  async function loadNews() {
+    const container = document.getElementById('news-container');
+    try {
+      // ດຶງລາຍຊື່ໄຟລ໌ຂ່າວຈາກ GitHub API (ປ່ຽນ Repo ໃຫ້ຖືກຕ້ອງ)
+      const response = await fetch('https://api.github.com/repos/sone22015-sudo/psshd512.com/contents/data/news');
+      const files = await response.json();
+      
+      container.innerHTML = ''; 
+
+      for (const file of files) {
+        if (file.name.endsWith('.md')) {
+          const res = await fetch(file.download_url);
+          const content = await res.text();
+          
+          // ແຍກຂໍ້ມູນ (ແບບງ່າຍ)
+          const title = content.split('\n')[1]?.replace('title: ', '').replace(/"/g, '') || file.name;
+          const imageMatch = content.match(/image: (.*)/);
+          const imageUrl = imageMatch ? imageMatch[1].replace(/"/g, '') : 'image/default.jpg';
+
+          const card = document.createElement('div');
+          card.className = 'news-card';
+          card.innerHTML = `
+            <img src="${imageUrl}" alt="news">
+            <div class="news-card-content">
+                <h3>${title}</h3>
+                <a href="#" class="read-more">ອ່ານຕໍ່...</a>
+            </div>
+          `;
+          container.appendChild(card);
+        }
+      }
+    } catch (error) {
+      container.innerHTML = '<p>ບໍ່ສາມາດໂຫລດຂ່າວໄດ້ໃນຕອນນີ້.</p>';
+    }
+  }
+
+  // ກວດສອບການ Login
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", user => {
       if (!user) {
@@ -100,6 +111,8 @@
       }
     });
   }
+
+  loadNews();
 </script>
 </body>
 </html>
